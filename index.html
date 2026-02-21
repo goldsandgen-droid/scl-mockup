@@ -243,30 +243,108 @@
       100% { left: 100%; }
     }
 
-    /* ===== SHADER BACKGROUND (shared for sports + ecosystem) ===== */
-    .shader-section {
+    /* ===== ANIMATED GRID BACKGROUND (for sports + ecosystem) ===== */
+    .grid-bg-section {
       position: relative;
+      overflow: hidden;
+      background: #0A0A0A;
+    }
+
+    .grid-bg-section > *:not(.grid-bg) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
       overflow: hidden;
     }
 
-    .shader-canvas {
+    /* Animated grid lines */
+    .grid-bg::before {
+      content: '';
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      opacity: 0.55;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background-image:
+        linear-gradient(rgba(0, 180, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 180, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(rgba(241, 185, 7, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(241, 185, 7, 0.06) 1px, transparent 1px);
+      background-size:
+        60px 60px,
+        60px 60px,
+        15px 15px,
+        15px 15px;
+      animation: gridScroll 20s linear infinite;
     }
 
-    .shader-section > *:not(canvas) {
-      position: relative;
-      z-index: 1;
+    @keyframes gridScroll {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Gold radial glow in center */
+    .grid-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(241, 185, 7, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 50% 50%, rgba(0, 180, 255, 0.06) 0%, transparent 60%);
+      animation: glowPulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    /* Scanning line overlay */
+    .grid-scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(241, 185, 7, 0.4) 20%, rgba(0, 180, 255, 0.5) 50%, rgba(241, 185, 7, 0.4) 80%, transparent 100%);
+      filter: blur(1px);
+      box-shadow: 0 0 20px rgba(241, 185, 7, 0.3), 0 0 60px rgba(0, 180, 255, 0.15);
+      animation: scanDown 8s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes scanDown {
+      0% { top: -2px; }
+      100% { top: 100%; }
+    }
+
+    /* Intersection node dots */
+    .grid-nodes {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle 2px at center, rgba(241, 185, 7, 0.25) 0%, transparent 100%);
+      background-size: 60px 60px;
+      background-position: -1px -1px;
+      animation: gridScroll 20s linear infinite;
+    }
+
+    /* Edge vignette for depth */
+    .grid-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, #0A0A0A 100%);
+      z-index: 0;
+      pointer-events: none;
     }
 
     /* ===== SPORTS / VENN SECTION ===== */
     .sports-section {
       padding: 100px 48px 80px;
-      background: var(--bg-dark);
+      background: transparent;
     }
 
     .sports-heading {
@@ -365,10 +443,10 @@
       object-fit: cover;
     }
 
-    /* ===== ECOSYSTEM SECTION (Radial Orbital Timeline) ===== */
+    /* ===== ECOSYSTEM SECTION ===== */
     .ecosystem-section {
-      padding: 100px 48px 120px;
-      background: var(--bg-dark);
+      padding: 100px 48px;
+      background: transparent;
     }
 
     .ecosystem-section::before {
@@ -380,243 +458,100 @@
       z-index: 2;
     }
 
-    .ecosystem-header {
-      text-align: center;
-      margin-bottom: 20px;
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
       position: relative;
       z-index: 2;
     }
 
-    .ecosystem-header h2 {
+    .ecosystem-left h2 {
       font-family: 'Mona Sans', sans-serif;
       font-size: 48px;
       font-weight: 700;
       letter-spacing: -1px;
+      margin-bottom: 40px;
       line-height: 1.1;
     }
 
-    .ecosystem-header p {
-      color: var(--text-secondary);
-      font-size: 16px;
-      margin-top: 12px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* ===== ORBITAL TIMELINE ===== */
-    .orbital-container {
+    .partner-block {
+      margin-bottom: 32px;
+      padding: 28px;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.4s ease;
       position: relative;
-      width: 100%;
-      max-width: 700px;
-      height: 700px;
-      margin: 0 auto;
+    }
+
+    .partner-block:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      border-color: var(--border-gold);
+    }
+
+    .partner-logo-img {
+      height: 40px;
+      margin-bottom: 16px;
+      opacity: 0.9;
+    }
+
+    .partner-block p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .partner-block .bold-text {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .ecosystem-right {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .orbital-ring {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08);
+    .eco-card {
+      padding: 32px;
+      border-radius: 16px;
+      transition: transform 0.4s;
     }
 
-    .orbital-ring-inner {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.04);
+    .eco-card:hover { transform: scale(1.02); }
+
+    .eco-card-gold {
+      background: var(--gold);
+      color: #000;
     }
 
-    /* Center orb */
-    .orbital-center {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, var(--gold), #C49A06, #0A0A0A);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      box-shadow: 0 0 40px rgba(241,185,7,0.3), 0 0 80px rgba(241,185,7,0.1);
-    }
-
-    .orbital-center img {
-      width: 48px;
-      height: 48px;
+    .eco-card-gold .eco-card-logo {
+      height: 32px;
+      margin-bottom: 16px;
       filter: brightness(0);
     }
 
-    .orbital-center-ping {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 1px solid rgba(241,185,7,0.3);
-      animation: centerPing 2.5s ease-out infinite;
-    }
-
-    .orbital-center-ping-2 {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 1px solid rgba(241,185,7,0.15);
-      animation: centerPing 2.5s ease-out infinite 0.5s;
-    }
-
-    @keyframes centerPing {
-      0% { transform: scale(0.8); opacity: 1; }
-      100% { transform: scale(1.6); opacity: 0; }
-    }
-
-    /* Orbital node */
-    .orbital-node {
-      position: absolute;
-      cursor: pointer;
-      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .orbital-node-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid rgba(255,255,255,0.3);
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(10px);
-      transition: all 0.4s ease;
-    }
-
-    .orbital-node-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: rgba(255,255,255,0.8);
-      fill: none;
-      stroke-width: 1.5;
-    }
-
-    .orbital-node:hover .orbital-node-icon {
-      border-color: var(--gold);
-      background: rgba(241,185,7,0.15);
-      transform: scale(1.15);
-      box-shadow: 0 0 20px rgba(241,185,7,0.3);
-    }
-
-    .orbital-node:hover .orbital-node-icon svg {
-      stroke: var(--gold);
-    }
-
-    .orbital-node-label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      white-space: nowrap;
-      transition: all 0.3s;
-      color: rgba(255,255,255,0.6);
-    }
-
-    .orbital-node:hover .orbital-node-label {
-      color: #fff;
-    }
-
-    .orbital-node.active .orbital-node-icon {
-      border-color: var(--gold);
-      background: var(--gold);
-      transform: scale(1.3);
-      box-shadow: 0 0 30px rgba(241,185,7,0.5);
-    }
-
-    .orbital-node.active .orbital-node-icon svg {
-      stroke: #000;
-    }
-
-    .orbital-node.active .orbital-node-label {
-      color: var(--gold);
-      font-size: 13px;
-    }
-
-    /* Expanded card */
-    .orbital-card {
-      position: absolute;
-      top: 64px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 260px;
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(241,185,7,0.25);
-      border-radius: 12px;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-origin: top center;
-      z-index: 100;
-    }
-
-    .orbital-card::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1px;
-      height: 8px;
-      background: rgba(241,185,7,0.5);
-    }
-
-    .orbital-node.active .orbital-card {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .orbital-card-badge {
-      display: inline-block;
-      padding: 3px 8px;
-      font-size: 10px;
+    .eco-card-gold h3 {
+      font-size: 24px;
       font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      margin-bottom: 8px;
+      line-height: 1.2;
     }
 
-    .orbital-card-badge.partner { background: var(--gold); color: #000; }
-    .orbital-card-badge.infra { background: rgba(0,180,255,0.2); color: var(--neon-blue); border: 1px solid rgba(0,180,255,0.3); }
-
-    .orbital-card h4 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 6px;
+    .eco-card-dark {
+      background: rgba(60, 60, 60, 0.5);
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    .orbital-card p {
-      font-size: 13px;
+    .eco-card-dark p {
       color: var(--text-secondary);
+      font-size: 16px;
       line-height: 1.6;
-    }
-
-    .orbital-card .highlight {
-      color: var(--gold);
-      font-weight: 600;
-      margin-top: 8px;
-      display: block;
-      font-size: 12px;
+      font-weight: 500;
     }
 
     /* ===== ROADMAP SECTION ===== */
@@ -953,9 +888,13 @@
     <span>Register for More</span>
   </div>
 
-  <!-- SPORTS / VENN SECTION (with shader background) -->
-  <section class="sports-section shader-section">
-    <canvas class="shader-canvas" id="shader-sports"></canvas>
+  <!-- SPORTS / VENN SECTION (with animated grid background) -->
+  <section class="sports-section grid-bg-section">
+    <div class="grid-bg">
+      <div class="grid-nodes"></div>
+      <div class="grid-scan-line"></div>
+      <div class="grid-vignette"></div>
+    </div>
     <h2 class="sports-heading reveal">
       A New Sports Entertainment category blending combat sports, gaming, and technology.
     </h2>
@@ -990,94 +929,46 @@
     </div>
   </section>
 
-  <!-- ECOSYSTEM PARTNERS (Radial Orbital Timeline) -->
-  <section class="ecosystem-section shader-section">
-    <canvas class="shader-canvas" id="shader-ecosystem"></canvas>
-
-    <div class="ecosystem-header reveal">
-      <h2>Ecosystem<br>Partners</h2>
-      <p>Where Base and Virtuals converge. SCL is the physical flagship product both ecosystems need.</p>
+  <!-- ECOSYSTEM PARTNERS -->
+  <section class="ecosystem-section grid-bg-section">
+    <div class="grid-bg">
+      <div class="grid-nodes"></div>
+      <div class="grid-scan-line" style="animation-delay: -4s;"></div>
+      <div class="grid-vignette"></div>
     </div>
+    <div class="ecosystem-grid">
+      <div class="ecosystem-left">
+        <h2 class="reveal">Ecosystem<br>Partners</h2>
 
-    <div class="orbital-container reveal-scale">
-      <!-- Orbital rings -->
-      <div class="orbital-ring"></div>
-      <div class="orbital-ring-inner"></div>
-
-      <!-- Center orb (SCL logo) -->
-      <div class="orbital-center">
-        <div class="orbital-center-ping"></div>
-        <div class="orbital-center-ping-2"></div>
-        <img src="https://shadowcombatleague.com/assets/landing/scl-header-logo.svg" alt="SCL">
-      </div>
-
-      <!-- Node: Virtuals -->
-      <div class="orbital-node" data-index="0" data-total="5" onclick="toggleOrbitalNode(this)">
-        <div class="orbital-node-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+        <div class="partner-block reveal">
+          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
+          <p>Virtuals is pushing the robotics narrative. They are keen for SCL to bring real-world robot combat into their ecosystem.</p>
+          <p class="bold-text">Strong ecosystem support, our first two humanoid robots are leased through Virtuals.</p>
         </div>
-        <div class="orbital-node-label">Virtuals</div>
-        <div class="orbital-card">
-          <span class="orbital-card-badge partner">Partner</span>
-          <h4>Virtuals Protocol</h4>
-          <p>Pushing the robotics narrative. Our first two humanoid robots are leased through Virtuals.</p>
-          <span class="highlight">Strong ecosystem support for real-world robot combat.</span>
+
+        <div class="partner-block reveal">
+          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+          <p>Base is building the consumer chain. Their mission: bring crypto to mainstream audiences.</p>
+          <p class="bold-text">SCL is a mainstream entertainment product built natively on Base. Content that goes viral without requiring a crypto explanation.</p>
         </div>
       </div>
 
-      <!-- Node: Base -->
-      <div class="orbital-node" data-index="1" data-total="5" onclick="toggleOrbitalNode(this)">
-        <div class="orbital-node-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg>
+      <div class="ecosystem-right">
+        <div class="eco-card eco-card-gold reveal-right">
+          <img class="eco-card-logo" src="https://shadowcombatleague.com/assets/landing/scl-header-logo.svg" alt="SCL">
+          <h3>Where Base and Virtuals converge</h3>
         </div>
-        <div class="orbital-node-label">Base</div>
-        <div class="orbital-card">
-          <span class="orbital-card-badge infra">Infrastructure</span>
-          <h4>Base Chain</h4>
-          <p>Building the consumer chain. Their mission: bring crypto to mainstream audiences.</p>
-          <span class="highlight">SCL is mainstream entertainment built natively on Base.</span>
-        </div>
-      </div>
 
-      <!-- Node: Robotics -->
-      <div class="orbital-node" data-index="2" data-total="5" onclick="toggleOrbitalNode(this)">
-        <div class="orbital-node-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v2H8V6a4 4 0 0 1 4-4z"/><rect x="4" y="8" width="16" height="12" rx="2"/><circle cx="9" cy="14" r="1.5"/><circle cx="15" cy="14" r="1.5"/></svg>
+        <div class="eco-card eco-card-dark reveal-right">
+          <p>Virtuals is building the robotics narrative. SCL makes it tangible.</p>
         </div>
-        <div class="orbital-node-label">Robotics</div>
-        <div class="orbital-card">
-          <span class="orbital-card-badge partner">Core</span>
-          <h4>Tele-Operated Combat</h4>
-          <p>Real humanoid robots, real combat. Tele-operated by skilled pilots from anywhere in the world.</p>
-          <span class="highlight">Validated tech. Two operational robots ready.</span>
-        </div>
-      </div>
 
-      <!-- Node: Content -->
-      <div class="orbital-node" data-index="3" data-total="5" onclick="toggleOrbitalNode(this)">
-        <div class="orbital-node-icon">
-          <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        <div class="eco-card eco-card-dark reveal-right">
+          <p>Base is building infrastructure for mainstream adoption. SCL delivers the mainstream attention.</p>
         </div>
-        <div class="orbital-node-label">Content</div>
-        <div class="orbital-card">
-          <span class="orbital-card-badge partner">Growth</span>
-          <h4>Viral Content Engine</h4>
-          <p>Content that goes viral without requiring a crypto explanation. Pure entertainment value.</p>
-          <span class="highlight">Mainstream attention for both ecosystems.</span>
-        </div>
-      </div>
 
-      <!-- Node: Token -->
-      <div class="orbital-node" data-index="4" data-total="5" onclick="toggleOrbitalNode(this)">
-        <div class="orbital-node-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="orbital-node-label">Token</div>
-        <div class="orbital-card">
-          <span class="orbital-card-badge infra">TGE Q1 2026</span>
-          <h4>$SCL Token</h4>
-          <p>Token Generation Event planned for Q1 2026. Community-driven tokenomics with real utility.</p>
-          <span class="highlight">Where Skill Meets Steel.</span>
+        <div class="eco-card eco-card-dark reveal-right">
+          <p>SCL is the physical flagship product both ecosystems have been missing.</p>
         </div>
       </div>
     </div>
@@ -1202,237 +1093,6 @@
   <div class="mockup-note">SCL REVAMP MOCKUP v3</div>
 
   <script>
-    // ===== WEBGL SHADER (Blue/Gold Cybernetic Grid) =====
-    function initShader(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-
-      const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
-      if (!gl) return;
-
-      // Enable derivatives extension for fwidth()
-      gl.getExtension('OES_standard_derivatives');
-
-      const vertexShaderSrc = `
-        attribute vec2 a_position;
-        void main() {
-          gl_Position = vec4(a_position, 0.0, 1.0);
-        }
-      `;
-
-      const fragmentShaderSrc = `
-        #extension GL_OES_standard_derivatives : enable
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-
-        float grid(vec2 uv, float lineWidth) {
-          vec2 grid = abs(fract(uv - 0.5) - 0.5) / fwidth(uv);
-          float line = min(grid.x, grid.y);
-          return 1.0 - min(line, 1.0);
-        }
-
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution;
-          vec2 centered = (uv - 0.5) * 2.0;
-
-          // Animated grid
-          vec2 gridUv = uv * 20.0;
-          gridUv.y += u_time * 0.3;
-          gridUv.x += sin(u_time * 0.2 + uv.y * 3.0) * 0.5;
-
-          float g = grid(gridUv, 0.02);
-
-          // Radial falloff from center
-          float dist = length(centered);
-          float radialFade = smoothstep(1.2, 0.0, dist);
-
-          // Gold color: rgb(241, 185, 7) = (0.945, 0.725, 0.027)
-          // Blue color: rgb(0, 180, 255) = (0.0, 0.706, 1.0)
-          // Mix based on position and time
-          float colorMix = sin(uv.x * 3.14159 + u_time * 0.5) * 0.5 + 0.5;
-          vec3 goldColor = vec3(0.945, 0.725, 0.027);
-          vec3 blueColor = vec3(0.0, 0.55, 1.0);
-          vec3 gridColor = mix(blueColor, goldColor, colorMix * 0.7 + 0.15);
-
-          // Pulse nodes at grid intersections
-          vec2 nodeUv = fract(gridUv);
-          float nodeDist = length(nodeUv - 0.5);
-          float node = smoothstep(0.15, 0.05, nodeDist);
-          float nodePulse = sin(u_time * 2.0 + floor(gridUv.x) * 1.3 + floor(gridUv.y) * 0.7) * 0.5 + 0.5;
-          node *= nodePulse * 0.6;
-
-          // Scanning line effect
-          float scanLine = smoothstep(0.02, 0.0, abs(fract(uv.y * 1.0 - u_time * 0.15) - 0.5));
-          vec3 scanColor = goldColor * scanLine * 0.3;
-
-          // Combine
-          float alpha = (g * 0.4 + node) * radialFade;
-          vec3 color = gridColor * g * 0.5 + gridColor * node * 1.5 + scanColor;
-          color *= radialFade;
-
-          // Add subtle ambient glow
-          color += goldColor * 0.02 * radialFade;
-
-          gl_FragColor = vec4(color, alpha * 0.8);
-        }
-      `;
-
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          console.error('Shader compile error:', gl.getShaderInfoLog(shader));
-          gl.deleteShader(shader);
-          return null;
-        }
-        return shader;
-      }
-
-      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSrc);
-      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSrc);
-
-      const program = gl.createProgram();
-      gl.attachShader(program, vertexShader);
-      gl.attachShader(program, fragmentShader);
-      gl.linkProgram(program);
-
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error('Program link error:', gl.getProgramInfoLog(program));
-        return;
-      }
-
-      const positionBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-        -1, -1, 1, -1, -1, 1,
-        -1, 1, 1, -1, 1, 1
-      ]), gl.STATIC_DRAW);
-
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
-      const timeLocation = gl.getUniformLocation(program, 'u_time');
-      const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
-
-      function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * window.devicePixelRatio * 0.5; // half res for perf
-        canvas.height = rect.height * window.devicePixelRatio * 0.5;
-      }
-
-      resize();
-      window.addEventListener('resize', resize);
-
-      let startTime = Date.now();
-      let animId;
-
-      function render() {
-        const time = (Date.now() - startTime) / 1000;
-
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-        gl.useProgram(program);
-        gl.enableVertexAttribArray(positionLocation);
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-        gl.uniform1f(timeLocation, time);
-        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        animId = requestAnimationFrame(render);
-      }
-
-      // Only animate when visible
-      let isVisible = false;
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !isVisible) {
-            isVisible = true;
-            render();
-          } else if (!entry.isIntersecting && isVisible) {
-            isVisible = false;
-            cancelAnimationFrame(animId);
-          }
-        });
-      }, { threshold: 0 });
-
-      observer.observe(canvas.parentElement);
-    }
-
-    // ===== ORBITAL TIMELINE ANIMATION =====
-    let orbitalAngle = 0;
-    let orbitalAutoRotate = true;
-    let activeOrbitalNode = null;
-
-    function positionOrbitalNodes() {
-      const nodes = document.querySelectorAll('.orbital-node');
-      const total = nodes.length;
-      const radius = 230;
-
-      nodes.forEach((node, index) => {
-        const angle = ((index / total) * 360 + orbitalAngle) % 360;
-        const radian = (angle * Math.PI) / 180;
-        const x = radius * Math.cos(radian);
-        const y = radius * Math.sin(radian);
-
-        const opacity = Math.max(0.5, Math.min(1, 0.5 + 0.5 * ((1 + Math.sin(radian)) / 2)));
-        const zIndex = Math.round(100 + 50 * Math.cos(radian));
-
-        node.style.transform = `translate(${x}px, ${y}px)`;
-        node.style.zIndex = node.classList.contains('active') ? 200 : zIndex;
-        node.style.opacity = node.classList.contains('active') ? 1 : opacity;
-      });
-    }
-
-    function toggleOrbitalNode(node) {
-      const wasActive = node.classList.contains('active');
-
-      // Close all
-      document.querySelectorAll('.orbital-node.active').forEach(n => n.classList.remove('active'));
-
-      if (!wasActive) {
-        node.classList.add('active');
-        activeOrbitalNode = node;
-        orbitalAutoRotate = false;
-
-        // Center view on this node
-        const index = parseInt(node.dataset.index);
-        const total = parseInt(node.dataset.total);
-        const targetAngle = (index / total) * 360;
-        orbitalAngle = 270 - targetAngle;
-      } else {
-        activeOrbitalNode = null;
-        orbitalAutoRotate = true;
-      }
-
-      positionOrbitalNodes();
-    }
-
-    // Close orbital cards when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.orbital-node') && !e.target.closest('.orbital-card')) {
-        document.querySelectorAll('.orbital-node.active').forEach(n => n.classList.remove('active'));
-        activeOrbitalNode = null;
-        orbitalAutoRotate = true;
-      }
-    });
-
-    // Auto-rotate orbital
-    setInterval(() => {
-      if (orbitalAutoRotate) {
-        orbitalAngle = (orbitalAngle + 0.3) % 360;
-        positionOrbitalNodes();
-      }
-    }, 50);
-
-    // Initial position
-    positionOrbitalNodes();
-
     // ===== SCROLL ANIMATIONS =====
     gsap.registerPlugin(ScrollTrigger);
 
@@ -1469,12 +1129,6 @@
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
     });
 
-    // ===== INIT SHADERS =====
-    // Small delay to ensure DOM is ready
-    setTimeout(() => {
-      initShader('shader-sports');
-      initShader('shader-ecosystem');
-    }, 100);
   </script>
 
 </body>
