@@ -22,6 +22,9 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
 
+  <!-- Spline 3D Runtime -->
+  <script type="module" src="https://unpkg.com/@splinetool/runtime@1.9.82/build/runtime.js"></script>
+
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -167,6 +170,68 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      animation: heroBreath 8s ease-in-out infinite;
+      transform-origin: center 40%;
+    }
+
+    @keyframes heroBreath {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.04); filter: brightness(1.08); }
+    }
+
+    /* Floating particles overlay */
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-particles span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      animation: particleFloat 6s ease-in-out infinite;
+    }
+
+    .hero-particles span:nth-child(1) { left: 15%; bottom: -5%; animation-delay: 0s; animation-duration: 7s; }
+    .hero-particles span:nth-child(2) { left: 30%; bottom: -5%; animation-delay: 1.2s; animation-duration: 5.5s; width: 2px; height: 2px; background: var(--neon-blue); }
+    .hero-particles span:nth-child(3) { left: 50%; bottom: -5%; animation-delay: 2.5s; animation-duration: 8s; }
+    .hero-particles span:nth-child(4) { left: 65%; bottom: -5%; animation-delay: 0.8s; animation-duration: 6s; width: 2px; height: 2px; background: var(--neon-blue); }
+    .hero-particles span:nth-child(5) { left: 80%; bottom: -5%; animation-delay: 3s; animation-duration: 7.5s; }
+    .hero-particles span:nth-child(6) { left: 25%; bottom: -5%; animation-delay: 4s; animation-duration: 6.5s; width: 2px; height: 2px; }
+    .hero-particles span:nth-child(7) { left: 70%; bottom: -5%; animation-delay: 1.8s; animation-duration: 5s; background: var(--neon-blue); }
+    .hero-particles span:nth-child(8) { left: 42%; bottom: -5%; animation-delay: 3.5s; animation-duration: 7s; width: 4px; height: 4px; }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(0); opacity: 0; }
+      15% { opacity: 0.8; }
+      85% { opacity: 0.3; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    /* Horizontal scan line on hero */
+    .hero-scan {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(241,185,7,0.3), rgba(0,180,255,0.2), transparent);
+      box-shadow: 0 0 15px rgba(241,185,7,0.15);
+      z-index: 2;
+      animation: heroScan 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes heroScan {
+      0% { top: 10%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 90%; opacity: 0; }
     }
 
     .hero-content {
@@ -190,10 +255,11 @@
     }
 
     .hero-subtitle {
-      font-size: 18px;
-      color: var(--text-secondary);
-      font-weight: 400;
-      letter-spacing: 0.5px;
+      font-size: 22px;
+      color: #FFFFFF;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(241, 185, 7, 0.4), 0 2px 10px rgba(0, 0, 0, 0.8);
     }
 
     .hero-tagline {
@@ -207,6 +273,110 @@
       bottom: 40px;
       left: 48px;
       z-index: 3;
+    }
+
+    /* ===== PARTNER MARQUEE ===== */
+    .partner-marquee {
+      background: linear-gradient(180deg, rgba(241,185,7,0.06) 0%, rgba(10,10,10,1) 100%);
+      border-top: 1px solid rgba(241,185,7,0.15);
+      border-bottom: 1px solid rgba(241,185,7,0.08);
+      padding: 28px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .partner-marquee::before,
+    .partner-marquee::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .partner-marquee::before {
+      left: 0;
+      background: linear-gradient(90deg, #0A0A0A 0%, transparent 100%);
+    }
+
+    .partner-marquee::after {
+      right: 0;
+      background: linear-gradient(270deg, #0A0A0A 0%, transparent 100%);
+    }
+
+    .marquee-label {
+      position: absolute;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      z-index: 3;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      animation: marqueeScroll 20s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      opacity: 0.55;
+      transition: opacity 0.4s ease;
+      cursor: default;
+    }
+
+    .marquee-item:hover {
+      opacity: 1;
+    }
+
+    .marquee-item img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .marquee-item img.invert-logo {
+      filter: brightness(0) invert(1);
+    }
+
+    .marquee-item span {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .marquee-divider {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.4;
+      flex-shrink: 0;
     }
 
     /* ===== YELLOW BANNER ===== */
@@ -369,16 +539,19 @@
 
     .sports-venn-center {
       position: relative;
-      width: 380px;
+      width: 420px;
+      height: 500px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .sports-venn-center img.sports-robot {
+    .sports-venn-center canvas {
       width: 100%;
-      height: auto;
+      height: 100%;
+      border: none;
+      border-radius: 12px;
       position: relative;
       z-index: 2;
     }
@@ -391,6 +564,7 @@
       height: 480px;
       transform: translate(-50%, -50%);
       animation: spinSlow 30s linear infinite;
+      z-index: 1;
     }
 
     @keyframes spinSlow {
@@ -406,6 +580,7 @@
       height: 420px;
       transform: translate(-50%, -50%);
       opacity: 0.5;
+      z-index: 0;
     }
 
     .sports-card-group {
@@ -666,32 +841,6 @@
       50% { transform: translateY(-12px); }
     }
 
-    /* Timeline line overlay on robot */
-    .roadmap-timeline-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      background: rgba(255,255,255,0.1);
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    .roadmap-timeline-fill {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      height: 0%;
-      background: var(--gold);
-      box-shadow: 0 0 10px var(--gold-glow);
-      transition: height 0.1s;
-      z-index: 4;
-      pointer-events: none;
-    }
 
     .roadmap-item-title {
       font-family: 'Oswald', 'Mona Sans', sans-serif;
@@ -898,19 +1047,92 @@
         <img src="https://shadowcombatleague.com/assets/landing/instagram.svg" alt="Instagram">
         <img src="https://shadowcombatleague.com/assets/landing/x.svg" alt="X">
       </div>
-      <button class="gradient-btn">Register for interest</button>
+      <button class="gradient-btn">Farm $SCL Tokens</button>
     </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <img class="hero-bg-img" src="https://shadowcombatleague.com/assets/landing/hero-background.jpg" alt="">
+    <div class="hero-particles">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="hero-scan"></div>
     <div class="hero-content">
       <h1>Tele-Operated<br>Robot Combat.</h1>
       <p class="hero-subtitle">Powered by Virtuals. Built on Base.</p>
     </div>
     <div class="hero-tagline">SKILL MEETS STEEL.</div>
   </section>
+
+  <!-- PARTNER MARQUEE -->
+  <div class="partner-marquee">
+    <div class="marquee-track">
+      <!-- Set 1 -->
+      <div class="marquee-item">
+        <img src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
+        <span>Virtuals Protocol</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img class="invert-logo" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+        <span>Base</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <svg class="mp-logo" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="4" fill="#fff"/><text x="16" y="21" text-anchor="middle" font-family="'Mona Sans',sans-serif" font-weight="800" font-size="14" fill="#0A0A0A">MP</text></svg>
+        <span>Media Prima</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
+        <span>Virtuals Protocol</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img class="invert-logo" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+        <span>Base</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <svg class="mp-logo" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="4" fill="#fff"/><text x="16" y="21" text-anchor="middle" font-family="'Mona Sans',sans-serif" font-weight="800" font-size="14" fill="#0A0A0A">MP</text></svg>
+        <span>Media Prima</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <!-- Set 2 (duplicate for seamless loop) -->
+      <div class="marquee-item">
+        <img src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
+        <span>Virtuals Protocol</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img class="invert-logo" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+        <span>Base</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <svg class="mp-logo" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="4" fill="#fff"/><text x="16" y="21" text-anchor="middle" font-family="'Mona Sans',sans-serif" font-weight="800" font-size="14" fill="#0A0A0A">MP</text></svg>
+        <span>Media Prima</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
+        <span>Virtuals Protocol</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <img class="invert-logo" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+        <span>Base</span>
+      </div>
+      <div class="marquee-divider"></div>
+      <div class="marquee-item">
+        <svg class="mp-logo" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="4" fill="#fff"/><text x="16" y="21" text-anchor="middle" font-family="'Mona Sans',sans-serif" font-weight="800" font-size="14" fill="#0A0A0A">MP</text></svg>
+        <span>Media Prima</span>
+      </div>
+      <div class="marquee-divider"></div>
+    </div>
+  </div>
 
   <!-- TGE BANNER -->
   <div class="tge-banner">
@@ -936,14 +1158,14 @@
         </div>
         <div class="sports-label" style="margin-top: 24px"><span class="dot"></span> Gaming</div>
         <div class="sports-card">
-          <img src="https://shadowcombatleague.com/assets/landing/sports-card-left.jpg" alt="Gaming">
+          <img src="https://shadowcombatleague.com/assets/landing/sports-card-right.jpg" alt="Gaming" style="object-position: center 30%;">
         </div>
       </div>
 
       <div class="sports-venn-center reveal-scale">
         <img class="circle-glow" src="https://shadowcombatleague.com/assets/landing/sports-circle-glow.png" alt="">
         <img class="circle-svg" src="https://shadowcombatleague.com/assets/landing/sports-circle-outer.svg" alt="">
-        <img class="sports-robot" src="https://shadowcombatleague.com/assets/landing/sports-robot-closeup.jpg" alt="Robot Fighter">
+        <canvas id="spline-robot" style="pointer-events:auto;"></canvas>
       </div>
 
       <div class="sports-card-group reveal-right">
@@ -953,7 +1175,7 @@
         </div>
         <div class="sports-label" style="margin-top: 24px"><span class="dot"></span> Entertainment</div>
         <div class="sports-card">
-          <img src="https://shadowcombatleague.com/assets/landing/sports-card-right.jpg" alt="Entertainment">
+          <img src="https://shadowcombatleague.com/assets/landing/sports-card-left.jpg" alt="Entertainment" style="object-position: center 60%;">
         </div>
       </div>
     </div>
@@ -980,7 +1202,7 @@
         </div>
 
         <div class="partner-block reveal-right">
-          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
+          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base" style="filter: brightness(0) invert(1);">
           <p>Base is building the consumer chain. Their mission: bring crypto to mainstream audiences.</p>
           <p class="bold-text">SCL is a mainstream entertainment product built natively on Base. Content that goes viral without requiring a crypto explanation.</p>
         </div>
@@ -1045,8 +1267,6 @@
 
         <!-- Center - Spline 3D Robot -->
         <div class="roadmap-robot-center">
-          <div class="roadmap-timeline-line"></div>
-          <div class="roadmap-timeline-fill" id="timeline-fill"></div>
           <div class="roadmap-robot-img-wrap">
             <img src="https://shadowcombatleague.com/assets/landing/sports-robot-closeup.jpg" alt="SCL Robot Fighter">
           </div>
@@ -1112,8 +1332,8 @@
   <section class="register-section">
     <img class="register-bg" src="https://shadowcombatleague.com/assets/landing/register-section-background.jpg" alt="">
     <div class="register-content">
-      <h2 class="reveal-scale">Register for Interest</h2>
-      <a href="#" class="gradient-btn reveal" style="font-size:15px; padding:14px 40px;">Contact Us</a>
+      <h2 class="reveal-scale">Farm $SCL Tokens</h2>
+      <a href="#" class="gradient-btn reveal" style="font-size:15px; padding:14px 40px;">Start Farming</a>
     </div>
   </section>
 
@@ -1144,18 +1364,6 @@
       revealObserver.observe(el);
     });
 
-    // Timeline fill on scroll
-    const timelineFill = document.getElementById('timeline-fill');
-    if (timelineFill) {
-      ScrollTrigger.create({
-        trigger: '.roadmap-section',
-        start: 'top center',
-        end: 'bottom center',
-        onUpdate: (self) => {
-          timelineFill.style.height = (self.progress * 100) + '%';
-        }
-      });
-    }
 
     // Hero parallax
     gsap.to('.hero-content', {
@@ -1163,6 +1371,31 @@
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
     });
 
+  </script>
+
+  <!-- Spline 3D Loader -->
+  <script type="module">
+    import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.82/build/runtime.js';
+
+    const canvas = document.getElementById('spline-robot');
+    if (canvas) {
+      const spline = new Application(canvas);
+      spline.load('https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode')
+        .then(() => {
+          console.log('Spline scene loaded successfully');
+        })
+        .catch((err) => {
+          console.warn('Spline load failed, showing fallback:', err);
+          // Fallback to static image if Spline fails
+          const parent = canvas.parentElement;
+          canvas.style.display = 'none';
+          const img = document.createElement('img');
+          img.src = 'https://shadowcombatleague.com/assets/landing/sports-robot-closeup.jpg';
+          img.alt = 'Robot Fighter';
+          img.style.cssText = 'width:100%;height:auto;max-width:300px;border-radius:12px;position:relative;z-index:2;filter:drop-shadow(0 0 30px rgba(241,185,7,0.3));animation:robotFloat 4s ease-in-out infinite;';
+          parent.appendChild(img);
+        });
+    }
   </script>
 
 </body>
