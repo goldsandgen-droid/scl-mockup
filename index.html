@@ -362,7 +362,7 @@
     }
 
     .marquee-item img.base-logo {
-      filter: brightness(0) invert(48%) sepia(98%) saturate(4066%) hue-rotate(212deg) brightness(100%) contrast(104%);
+      filter: brightness(0) invert(27%) sepia(86%) saturate(2935%) hue-rotate(218deg) brightness(97%) contrast(105%);
     }
 
     .marquee-item span {
@@ -1030,6 +1030,256 @@
       z-index: 999;
       letter-spacing: 0.5px;
     }
+
+    /* ===== MOBILE NAV TOGGLE ===== */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 101;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      transition: all 0.3s;
+    }
+
+    /* ============================================
+       RESPONSIVE: TABLET (max-width: 1024px)
+       ============================================ */
+    @media (max-width: 1024px) {
+      /* Navbar */
+      .navbar { padding: 14px 24px; }
+      .navbar-links { gap: 20px; }
+      .navbar-links a { font-size: 14px; }
+
+      /* Hero */
+      .hero-content { padding: 0 24px; }
+      .hero-tagline { left: 24px; }
+
+      /* Marquee */
+      .marquee-track { gap: 50px; }
+      .marquee-item span { font-size: 13px; }
+
+      /* TGE Banner */
+      .tge-banner { padding: 12px 24px; }
+
+      /* Sports Section */
+      .sports-section { padding: 80px 24px 60px; }
+      .sports-venn { gap: 24px; }
+      .sports-venn-center { width: 320px; height: 400px; }
+      .sports-venn-center .circle-svg { width: 380px; height: 380px; }
+      .sports-venn-center .circle-glow { width: 320px; height: 320px; }
+      .sports-card { width: 170px; height: 110px; }
+
+      /* Ecosystem */
+      .ecosystem-section { padding: 80px 24px; }
+
+      /* Roadmap */
+      .roadmap-section { padding: 60px 24px 80px; }
+      .roadmap-header h2 { font-size: 56px; letter-spacing: 4px; }
+      .roadmap-layout { grid-template-columns: 1fr 260px 1fr; gap: 20px; }
+
+      /* Demo */
+      .demo-section { padding: 60px 24px; }
+      .demo-header h2 { font-size: 40px; }
+
+      /* Register */
+      .register-section { padding: 80px 24px; }
+      .register-section h2 { font-size: 44px; }
+
+      /* Footer */
+      .footer { padding: 16px 24px; }
+    }
+
+    /* ============================================
+       RESPONSIVE: TABLET SMALL (max-width: 768px)
+       ============================================ */
+    @media (max-width: 768px) {
+      /* Navbar - hamburger */
+      .nav-toggle { display: flex; }
+
+      .navbar-links {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        z-index: 100;
+      }
+
+      .navbar-links.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .navbar-links a { font-size: 24px; font-weight: 600; }
+
+      .navbar-social { display: none; }
+
+      .gradient-btn { padding: 10px 20px; font-size: 12px; }
+
+      /* Hero */
+      .hero-content { top: 38%; }
+      .hero-content h1 { font-size: 48px; letter-spacing: -1px; }
+      .hero-subtitle { font-size: 16px; }
+      .hero-tagline { font-size: 12px; letter-spacing: 3px; bottom: 24px; left: 24px; }
+
+      /* Marquee */
+      .partner-marquee { padding: 20px 0; }
+      .partner-marquee::before,
+      .partner-marquee::after { width: 60px; }
+      .marquee-track { gap: 40px; }
+      .marquee-item img { height: 24px; }
+      .marquee-item span { font-size: 12px; letter-spacing: 1px; }
+
+      /* TGE Banner */
+      .tge-banner span { font-size: 12px; }
+
+      /* Sports Section - stack vertically */
+      .sports-section { padding: 60px 20px 50px; }
+      .sports-heading { font-size: 28px; margin-bottom: 40px; }
+
+      .sports-venn {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .sports-card-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .sports-card-group > .sports-label { width: auto; }
+
+      .sports-venn-center {
+        width: 280px;
+        height: 340px;
+        order: -1;
+      }
+
+      .sports-venn-center .circle-svg { width: 320px; height: 320px; }
+      .sports-venn-center .circle-glow { width: 280px; height: 280px; }
+
+      .sports-card { width: 160px; height: 100px; }
+
+      /* Ecosystem */
+      .ecosystem-section { padding: 60px 20px; }
+      .ecosystem-header h2 { font-size: 36px; }
+      .partners-row { grid-template-columns: 1fr; gap: 16px; }
+      .partner-block { padding: 24px; }
+
+      .eco-converge {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px 24px;
+      }
+
+      .eco-converge h3 { font-size: 22px; }
+
+      .eco-pointers { grid-template-columns: 1fr; gap: 12px; }
+      .eco-pointer { padding: 22px; }
+
+      /* Roadmap - single column */
+      .roadmap-section { padding: 50px 20px 60px; }
+      .roadmap-header h2 { font-size: 44px; letter-spacing: 3px; margin-bottom: 40px; }
+
+      .roadmap-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .roadmap-robot-center {
+        min-height: 300px;
+        order: -1;
+        margin-bottom: 40px;
+      }
+
+      .roadmap-robot-img-wrap img { max-width: 220px; }
+      .roadmap-robot-img-wrap::before { width: 200px; height: 200px; }
+
+      .roadmap-col { gap: 32px; }
+      .roadmap-col-right { padding-top: 32px; }
+
+      .roadmap-item-title { font-size: 20px; }
+
+      /* Demo */
+      .demo-section { padding: 50px 20px; }
+      .demo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .demo-header h2 { font-size: 32px; }
+      .demo-header p { text-align: left; font-size: 14px; }
+
+      /* Register */
+      .register-section { padding: 60px 20px; }
+      .register-section h2 { font-size: 36px; letter-spacing: 1px; }
+
+      /* Footer */
+      .footer { padding: 14px 20px; }
+      .footer span { font-size: 12px; }
+    }
+
+    /* ============================================
+       RESPONSIVE: MOBILE (max-width: 480px)
+       ============================================ */
+    @media (max-width: 480px) {
+      /* Hero */
+      .hero-content h1 { font-size: 36px; letter-spacing: 0; }
+      .hero-subtitle { font-size: 14px; letter-spacing: 0.5px; }
+      .hero-tagline { font-size: 10px; letter-spacing: 2px; }
+
+      /* Marquee */
+      .marquee-track { gap: 30px; }
+      .marquee-item { gap: 8px; }
+      .marquee-item img { height: 20px; }
+      .marquee-item span { font-size: 11px; }
+
+      /* Sports */
+      .sports-heading { font-size: 22px; padding: 0 8px; }
+      .sports-venn-center { width: 240px; height: 300px; }
+      .sports-venn-center .circle-svg { width: 280px; height: 280px; }
+      .sports-card { width: 140px; height: 90px; }
+      .sports-label { font-size: 14px; }
+
+      /* Ecosystem */
+      .ecosystem-header h2 { font-size: 28px; }
+      .eco-converge h3 { font-size: 18px; }
+      .partner-block p, .eco-pointer p { font-size: 14px; }
+
+      /* Roadmap */
+      .roadmap-header h2 { font-size: 36px; letter-spacing: 2px; }
+      .roadmap-robot-center { min-height: 240px; }
+      .roadmap-robot-img-wrap img { max-width: 180px; }
+
+      /* Demo */
+      .demo-header h2 { font-size: 26px; }
+      .play-button { width: 56px; height: 56px; }
+      .play-button svg { width: 20px; height: 20px; }
+
+      /* Register */
+      .register-section h2 { font-size: 28px; }
+
+      /* Footer */
+      .footer { flex-direction: column; gap: 4px; text-align: center; }
+    }
   </style>
 </head>
 <body>
@@ -1052,6 +1302,9 @@
         <img src="https://shadowcombatleague.com/assets/landing/x.svg" alt="X">
       </div>
       <button class="gradient-btn">Farm $SCL Tokens</button>
+      <button class="nav-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
@@ -1206,7 +1459,7 @@
         </div>
 
         <div class="partner-block reveal-right">
-          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base" style="filter: brightness(0) invert(48%) sepia(98%) saturate(4066%) hue-rotate(212deg) brightness(100%) contrast(104%);">
+          <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base" style="filter: brightness(0) invert(27%) sepia(86%) saturate(2935%) hue-rotate(218deg) brightness(97%) contrast(105%);">
           <p>Base is building the consumer chain. Their mission: bring crypto to mainstream audiences.</p>
           <p class="bold-text">SCL is a mainstream entertainment product built natively on Base. Content that goes viral without requiring a crypto explanation.</p>
         </div>
