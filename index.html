@@ -458,33 +458,40 @@
       z-index: 2;
     }
 
-    .ecosystem-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
+    .ecosystem-inner {
       max-width: 1200px;
       margin: 0 auto;
       position: relative;
       z-index: 2;
     }
 
-    .ecosystem-left h2 {
+    .ecosystem-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .ecosystem-header h2 {
       font-family: 'Mona Sans', sans-serif;
       font-size: 48px;
       font-weight: 700;
       letter-spacing: -1px;
-      margin-bottom: 40px;
       line-height: 1.1;
     }
 
+    /* Partners side by side */
+    .partners-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
     .partner-block {
-      margin-bottom: 32px;
       padding: 28px;
       border-radius: 16px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       transition: all 0.4s ease;
-      position: relative;
     }
 
     .partner-block:hover {
@@ -511,45 +518,57 @@
       margin-top: 12px;
     }
 
-    .ecosystem-right {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .eco-card {
-      padding: 32px;
+    /* Converge banner full-width */
+    .eco-converge {
+      padding: 36px 40px;
       border-radius: 16px;
+      background: var(--gold);
+      color: #000;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 24px;
       transition: transform 0.4s;
     }
 
-    .eco-card:hover { transform: scale(1.02); }
+    .eco-converge:hover { transform: scale(1.01); }
 
-    .eco-card-gold {
-      background: var(--gold);
-      color: #000;
-    }
-
-    .eco-card-gold .eco-card-logo {
-      height: 32px;
-      margin-bottom: 16px;
+    .eco-converge .eco-card-logo {
+      height: 36px;
       filter: brightness(0);
+      flex-shrink: 0;
     }
 
-    .eco-card-gold h3 {
-      font-size: 24px;
+    .eco-converge h3 {
+      font-size: 28px;
       font-weight: 700;
       line-height: 1.2;
     }
 
-    .eco-card-dark {
-      background: rgba(60, 60, 60, 0.5);
-      border: 1px solid rgba(255,255,255,0.06);
+    /* 3 pointers row */
+    .eco-pointers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
-    .eco-card-dark p {
+    .eco-pointer {
+      padding: 28px;
+      border-radius: 16px;
+      background: rgba(60, 60, 60, 0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.4s ease;
+    }
+
+    .eco-pointer:hover {
+      background: rgba(80, 80, 80, 0.5);
+      transform: translateY(-3px);
+      border-color: var(--border-gold);
+    }
+
+    .eco-pointer p {
       color: var(--text-secondary);
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.6;
       font-weight: 500;
     }
@@ -613,27 +632,38 @@
       min-height: 500px;
     }
 
-    .roadmap-robot-center iframe,
-    .roadmap-robot-center .spline-fallback {
+    .roadmap-robot-img-wrap {
+      position: relative;
       width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 12px;
-    }
-
-    .spline-fallback {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at center, rgba(241,185,7,0.08), transparent 70%);
-      border: 1px solid rgba(241,185,7,0.15);
     }
 
-    .spline-fallback img {
+    .roadmap-robot-img-wrap img {
       width: 100%;
-      max-width: 280px;
-      border-radius: 8px;
-      opacity: 0.9;
+      max-width: 300px;
+      height: auto;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 30px rgba(241, 185, 7, 0.3)) drop-shadow(0 0 60px rgba(0, 180, 255, 0.15));
+      animation: robotFloat 4s ease-in-out infinite;
+    }
+
+    .roadmap-robot-img-wrap::before {
+      content: '';
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(241,185,7,0.12) 0%, rgba(0,180,255,0.06) 40%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes robotFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
     }
 
     /* Timeline line overlay on robot */
@@ -936,38 +966,41 @@
       <div class="grid-scan-line" style="animation-delay: -4s;"></div>
       <div class="grid-vignette"></div>
     </div>
-    <div class="ecosystem-grid">
-      <div class="ecosystem-left">
-        <h2 class="reveal">Ecosystem<br>Partners</h2>
+    <div class="ecosystem-inner">
+      <div class="ecosystem-header">
+        <h2 class="reveal">Ecosystem Partners</h2>
+      </div>
 
-        <div class="partner-block reveal">
+      <!-- Virtuals + Base side by side -->
+      <div class="partners-row">
+        <div class="partner-block reveal-left">
           <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/VirtualsLogo.png" alt="Virtuals Protocol">
           <p>Virtuals is pushing the robotics narrative. They are keen for SCL to bring real-world robot combat into their ecosystem.</p>
           <p class="bold-text">Strong ecosystem support, our first two humanoid robots are leased through Virtuals.</p>
         </div>
 
-        <div class="partner-block reveal">
+        <div class="partner-block reveal-right">
           <img class="partner-logo-img" src="https://shadowcombatleague.com/assets/landing/base.svg" alt="Base">
           <p>Base is building the consumer chain. Their mission: bring crypto to mainstream audiences.</p>
           <p class="bold-text">SCL is a mainstream entertainment product built natively on Base. Content that goes viral without requiring a crypto explanation.</p>
         </div>
       </div>
 
-      <div class="ecosystem-right">
-        <div class="eco-card eco-card-gold reveal-right">
-          <img class="eco-card-logo" src="https://shadowcombatleague.com/assets/landing/scl-header-logo.svg" alt="SCL">
-          <h3>Where Base and Virtuals converge</h3>
-        </div>
+      <!-- Full-width converge banner -->
+      <div class="eco-converge reveal-scale">
+        <img class="eco-card-logo" src="https://shadowcombatleague.com/assets/landing/scl-header-logo.svg" alt="SCL">
+        <h3>Where Base and Virtuals converge</h3>
+      </div>
 
-        <div class="eco-card eco-card-dark reveal-right">
+      <!-- 3 pointers spread horizontally -->
+      <div class="eco-pointers">
+        <div class="eco-pointer reveal">
           <p>Virtuals is building the robotics narrative. SCL makes it tangible.</p>
         </div>
-
-        <div class="eco-card eco-card-dark reveal-right">
+        <div class="eco-pointer reveal">
           <p>Base is building infrastructure for mainstream adoption. SCL delivers the mainstream attention.</p>
         </div>
-
-        <div class="eco-card eco-card-dark reveal-right">
+        <div class="eco-pointer reveal">
           <p>SCL is the physical flagship product both ecosystems have been missing.</p>
         </div>
       </div>
@@ -1014,8 +1047,9 @@
         <div class="roadmap-robot-center">
           <div class="roadmap-timeline-line"></div>
           <div class="roadmap-timeline-fill" id="timeline-fill"></div>
-          <!-- Spline 3D scene embed -->
-          <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-2b2e7ef849af41db9dfc1ef670aa0889/" loading="lazy" title="3D Robot" style="width:100%;height:500px;border:none;border-radius:12px;pointer-events:auto;"></iframe>
+          <div class="roadmap-robot-img-wrap">
+            <img src="https://shadowcombatleague.com/assets/landing/sports-robot-closeup.jpg" alt="SCL Robot Fighter">
+          </div>
         </div>
 
         <!-- Right column -->
